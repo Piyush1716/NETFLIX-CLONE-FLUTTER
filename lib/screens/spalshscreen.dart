@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:netflix/common/bottom_navbar.dart';
 import 'package:netflix/screens/home_page.dart';
 
 class Spalshscreen extends StatefulWidget {
@@ -12,11 +13,11 @@ class Spalshscreen extends StatefulWidget {
 }
 
 class _SpalshscreenState extends State<Spalshscreen> {
-
+  @override
   void initState(){
     super.initState();
-    Timer(Duration(seconds: 3), (){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (conext) => HomePage()));
+    Timer(Duration(seconds: 0), (){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (conext) => BottomNavbar()));
     });
   }
 

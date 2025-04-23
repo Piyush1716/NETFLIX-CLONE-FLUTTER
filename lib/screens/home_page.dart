@@ -5,17 +5,19 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(length: 3, child: Scaffold(
-      body: TabBarView(children: [
-        Center(child: Text("H O M E"),),
-        Center(child: Text("P R O F I L E"),),
-        Center(child: Text("S E T T I N G S"),),
-      ]),
-      // bottomNavigationBar: TabBar(tabs: [
-      //   Tab(icon : Icon(Icons.home)),
-      //   Tab(icon : Icon(Icons.person)),
-      //   Tab(icon : Icon(Icons.settings)),
-      // ]),
-    ));
+    return Scaffold(
+      appBar: AppBar(
+        title: Image.asset("assets/logo.png", height: 50, width: 120),
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.search, color: Colors.white,)),
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0, left: 25),
+            child: Container(height: 25, width: 25, decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(5)),),
+          ),
+        ],
+      ),
+    );
   }
 }
