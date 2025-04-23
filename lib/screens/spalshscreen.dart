@@ -1,0 +1,32 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:netflix/screens/home_page.dart';
+
+class Spalshscreen extends StatefulWidget {
+  const Spalshscreen({super.key});
+
+  @override
+  State<Spalshscreen> createState() => _SpalshscreenState();
+}
+
+class _SpalshscreenState extends State<Spalshscreen> {
+
+  void initState(){
+    super.initState();
+    Timer(Duration(seconds: 3), (){
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (conext) => HomePage()));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: Center(
+      child: Lottie.asset("assets/netflix.json"),
+    )
+    );
+  }
+}
