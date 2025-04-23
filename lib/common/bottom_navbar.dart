@@ -11,8 +11,8 @@ class BottomNavbar extends StatelessWidget {
       child: Scaffold(
         body: TabBarView(children: [
           HomePage(),
-          // Search(),
-          // NewHot(),
+          Container(),
+          Container(),
 
         ]),
         bottomNavigationBar: Container(

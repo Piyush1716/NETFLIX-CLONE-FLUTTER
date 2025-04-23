@@ -1,7 +1,30 @@
-import 'package:flutter/material.dart';
+import 'dart:developer';
 
-class HomePage extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:netflix/helper/movie_card.dart';
+import 'package:netflix/models/now_playing_model.dart';
+import 'package:netflix/models/upcoming_movie_model.dart';
+import 'package:netflix/services/api_services.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late Future<UpcomingMovieModel> upcomings;
+  late Future<NowPlayingMovieModel> now_playing;
+
+  final ApiServices _apiServices = ApiServices();
+
+  @override
+  void initState() {
+    super.initState();
+    upcomings = _apiServices.getUpcommingMovies();
+    now_playing = _apiServices.getNowPlaying();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +40,21 @@ class HomePage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5)),),
           ),
         ],
+      ),
+
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 220,
+              child: MovieCard(movies: upcomings, heading: "Upcoming Movies"),
+            ),
+            SizedBox(
+              height: 220,
+              child: MovieCard(movies: now_playing, heading: "Now Playing"),
+            ),
+          ],
+        ),
       ),
     );
   }
