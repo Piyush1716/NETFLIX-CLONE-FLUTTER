@@ -7,12 +7,12 @@ class BottomNavbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 1,
       child: Scaffold(
         body: TabBarView(children: [
           HomePage(),
-          Container(),
-          Container(),
+          // Container(),
+          // Container(),
 
         ]),
         bottomNavigationBar: Container(
@@ -24,8 +24,8 @@ class BottomNavbar extends StatelessWidget {
             indicatorColor: Colors.transparent,
             tabs: [
               Tab(text: "Home", icon: Icon(Icons.home)),
-              Tab(text: "Search", icon: Icon(Icons.search)),
-              Tab(text: "New & Hot", icon: Icon(Icons.photo_library_outlined)),
+              // Tab(text: "Search", icon: Icon(Icons.search)),
+              // Tab(text: "New & Hot", icon: Icon(Icons.photo_library_outlined)),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:netflix/helper/custom_CarouselSlider.dart';
 import 'package:netflix/helper/movie_card.dart';
 import 'package:netflix/models/now_playing_model.dart';
 import 'package:netflix/models/tv_series_model.dart';
@@ -32,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
         title: Image.asset("assets/logo.png", height: 50, width: 120),
         actions: [
           IconButton(onPressed: () {}, icon: Icon(Icons.search, color: Colors.white,)),
@@ -47,7 +49,15 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            
+            FutureBuilder(future: topTvs, builder: (context, snap){
+              if(snap.connectionState == ConnectionState.waiting){
+                return SizedBox(height:300, child: Center(child: CircularProgressIndicator()));
+              }
+              else if(snap.hasData){
+                return CustomCarouselslider(tvs: snap.data!);
+              }
+              else {return Text("Got Error");}
+            }),
             SizedBox(
               height: 220,
               child: MovieCard(movies: upcomings, heading: "Upcoming Movies"),
