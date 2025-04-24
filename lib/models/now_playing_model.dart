@@ -1,15 +1,13 @@
 import 'dart:convert';
 
-import 'package:netflix/models/models.dart';
-
-class NowPlayingMovieModel extends Models{
+class MovieModel {
   Dates dates;
   int page;
   List<Result> results;
   int totalPages;
   int totalResults;
 
-  NowPlayingMovieModel({
+  MovieModel({
     required this.dates,
     required this.page,
     required this.results,
@@ -17,13 +15,13 @@ class NowPlayingMovieModel extends Models{
     required this.totalResults,
   });
 
-  NowPlayingMovieModel copyWith({
+  MovieModel copyWith({
     Dates? dates,
     int? page,
     List<Result>? results,
     int? totalPages,
     int? totalResults,
-  }) => NowPlayingMovieModel(
+  }) => MovieModel(
     dates: dates ?? this.dates,
     page: page ?? this.page,
     results: results ?? this.results,
@@ -31,13 +29,13 @@ class NowPlayingMovieModel extends Models{
     totalResults: totalResults ?? this.totalResults,
   );
 
-  factory NowPlayingMovieModel.fromRawJson(String str) =>
-      NowPlayingMovieModel.fromJson(json.decode(str));
+  factory MovieModel.fromRawJson(String str) =>
+      MovieModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory NowPlayingMovieModel.fromJson(Map<String, dynamic> json) =>
-      NowPlayingMovieModel(
+  factory MovieModel.fromJson(Map<String, dynamic> json) =>
+      MovieModel(
         dates: Dates.fromJson(json["dates"]),
         page: json["page"],
         results: List<Result>.from(
@@ -87,7 +85,7 @@ class Result {
   String backdropPath;
   List<int> genreIds;
   int id;
-  OriginalLanguage originalLanguage;
+  String originalLanguage;
   String originalTitle;
   String overview;
   double popularity;
@@ -120,7 +118,7 @@ class Result {
     String? backdropPath,
     List<int>? genreIds,
     int? id,
-    OriginalLanguage? originalLanguage,
+    String? originalLanguage,
     String? originalTitle,
     String? overview,
     double? popularity,
@@ -156,7 +154,7 @@ class Result {
     backdropPath: json["backdrop_path"],
     genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
     id: json["id"],
-    originalLanguage: originalLanguageValues.map[json["original_language"]]!,
+    originalLanguage: json["original_language"],
     originalTitle: json["original_title"],
     overview: json["overview"],
     popularity: json["popularity"]?.toDouble(),
@@ -173,7 +171,7 @@ class Result {
     "backdrop_path": backdropPath,
     "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
     "id": id,
-    "original_language": originalLanguageValues.reverse[originalLanguage],
+    "original_language": originalLanguage,
     "original_title": originalTitle,
     "overview": overview,
     "popularity": popularity,
@@ -185,25 +183,4 @@ class Result {
     "vote_average": voteAverage,
     "vote_count": voteCount,
   };
-}
-
-enum OriginalLanguage { DA, EN, FR, NL }
-
-final originalLanguageValues = EnumValues({
-  "da": OriginalLanguage.DA,
-  "en": OriginalLanguage.EN,
-  "fr": OriginalLanguage.FR,
-  "nl": OriginalLanguage.NL,
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

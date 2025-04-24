@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:netflix/helper/movie_card.dart';
 import 'package:netflix/models/now_playing_model.dart';
-import 'package:netflix/models/upcoming_movie_model.dart';
+import 'package:netflix/models/tv_series_model.dart';
 import 'package:netflix/services/api_services.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,8 +14,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<UpcomingMovieModel> upcomings;
-  late Future<NowPlayingMovieModel> now_playing;
+  late Future<MovieModel> upcomings;
+  late Future<MovieModel> nowPlaying;
+  late Future<TvSeriesModel> topTvs;
 
   final ApiServices _apiServices = ApiServices();
 
@@ -23,7 +24,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     upcomings = _apiServices.getUpcommingMovies();
-    now_playing = _apiServices.getNowPlaying();
+    nowPlaying = _apiServices.getNowPlaying();
+    topTvs = _apiServices.getTopRatedTvSeries();
   }
 
   @override
@@ -45,13 +47,14 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            
             SizedBox(
               height: 220,
               child: MovieCard(movies: upcomings, heading: "Upcoming Movies"),
             ),
             SizedBox(
               height: 220,
-              child: MovieCard(movies: now_playing, heading: "Now Playing"),
+              child: MovieCard(movies: nowPlaying, heading: "Now Playing"),
             ),
           ],
         ),
