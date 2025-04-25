@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
               }
               else {return Text("Got Error");}
             }),
+            SizedBox(height: 20),
             SizedBox(
               height: 220,
               child: MovieCard(movies: upcomings, heading: "Upcoming Movies"),

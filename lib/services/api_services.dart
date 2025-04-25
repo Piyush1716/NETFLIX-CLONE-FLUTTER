@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:netflix/helper/utils.dart';
 import 'package:netflix/models/now_playing_model.dart';
 import "package:http/http.dart" as http;
+import 'package:netflix/models/serach_movie_model.dart';
 import 'package:netflix/models/tv_series_model.dart';
 
 const baseUrl = "https://api.themoviedb.org/3/";
@@ -49,5 +50,21 @@ class ApiServices {
     }
     print(response.statusCode);
     throw Exception("Can't fetch Top rated tvs!!");
+  }
+
+  Future<SerachMovieModel> searchMovie(String movie) async{
+    //  url is liek https://api.themoviedb.org/3/search/movie?query=xx&api_key=111
+    endpoint = "search/movie?query=$movie";
+    final url = "$baseUrl$endpoint&api_key=$apikey";
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      print("Search Movies Success!!");
+      try{return SerachMovieModel.fromJson(jsonDecode(response.body));}
+      catch(e){print("json error");}
+    }
+    print("Error");
+    print(response.statusCode);
+    throw Exception("Can't Search Movies!!");
   }
 }

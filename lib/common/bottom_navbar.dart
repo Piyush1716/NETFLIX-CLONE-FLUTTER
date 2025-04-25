@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:netflix/screens/home_page.dart';
+import 'package:netflix/screens/new_and_hot.dart';
+import 'package:netflix/screens/search_page.dart';
 
 class BottomNavbar extends StatelessWidget {
   const BottomNavbar({super.key});
@@ -7,13 +9,13 @@ class BottomNavbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 1,
+      length: 3,
+      initialIndex: 1,
       child: Scaffold(
         body: TabBarView(children: [
           HomePage(),
-          // Container(),
-          // Container(),
-
+          SearchPage(),
+          NewAndHot()
         ]),
         bottomNavigationBar: Container(
           color: Colors.black,
@@ -24,8 +26,8 @@ class BottomNavbar extends StatelessWidget {
             indicatorColor: Colors.transparent,
             tabs: [
               Tab(text: "Home", icon: Icon(Icons.home)),
-              // Tab(text: "Search", icon: Icon(Icons.search)),
-              // Tab(text: "New & Hot", icon: Icon(Icons.photo_library_outlined)),
+              Tab(text: "Search", icon: Icon(Icons.search)),
+              Tab(text: "New & Hot", icon: Icon(Icons.photo_library_outlined)),
             ],
           ),
         ),
