@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:netflix/common/bottom_navbar.dart';
-import 'package:netflix/screens/home_page.dart';
 
 class Spalshscreen extends StatefulWidget {
   const Spalshscreen({super.key});

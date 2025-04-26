@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:netflix/helper/utils.dart';
+import 'package:netflix/models/movie_info_model.dart';
 import 'package:netflix/models/now_playing_model.dart';
 import "package:http/http.dart" as http;
 import 'package:netflix/models/serach_movie_model.dart';
@@ -51,6 +51,18 @@ class ApiServices {
     }
     print(response.statusCode);
     throw Exception("Can't fetch now playing!!");
+  }
+  Future<MovieInfoModel> getMovieInfo(int id) async{
+    endpoint = "movie/${id}";
+    final url = "$baseUrl$endpoint$api";
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      print("Movie info Success!!");
+      return MovieInfoModel.fromJson(jsonDecode(response.body));
+    }
+    print(response.statusCode);
+    throw Exception("Can't fetch Movie info!!");
   }
 
   Future<TvSeriesModel> getTopRatedTvSeries() async{

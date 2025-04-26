@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:netflix/helper/utils.dart';
 import 'package:netflix/models/serach_movie_model.dart';
 import 'package:netflix/models/top_searches_model.dart';
+import 'package:netflix/screens/movie_info.dart';
 import 'package:netflix/services/api_services.dart';
 
 class SearchPage extends StatefulWidget {
@@ -78,24 +79,29 @@ class _SearchPageState extends State<SearchPage> {
                           return ListView.builder(
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
-                            itemCount: popMovie!.length ,
+                            itemCount: popMovie.length ,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index){
                                 return Container(
                                   padding: EdgeInsets.all(5),
                                   height: 150,
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                                  child: Row(
-                                    children: [
-                                      CachedNetworkImage(
-                                        imageUrl: "$imgpath${popMovie[index].posterPath}",
-                                      ),
-                                      SizedBox(width: 25),
-                                      SizedBox(
-                                        width: 260,
-                                        child: Text("${popMovie[index].title}", maxLines: 2, overflow: TextOverflow.ellipsis,),
-                                      ),
-                                    ]
+                                  child: GestureDetector(
+                                    // onTap: (){
+                                    //   Navigator.push(context, MaterialPageRoute(builder: (context) => MovieInfo(id: popMovie[index].id)));
+                                    // },
+                                    child: Row(
+                                      children: [
+                                        CachedNetworkImage(
+                                          imageUrl: "$imgpath${popMovie[index].posterPath}",
+                                        ),
+                                        SizedBox(width: 25),
+                                        SizedBox(
+                                          width: 260,
+                                          child: Text("${popMovie[index].title}", maxLines: 2, overflow: TextOverflow.ellipsis,),
+                                        ),
+                                      ]
+                                    ),
                                   ),
                                 );
                           });
@@ -117,25 +123,30 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                     itemCount: movies!.results.length,
                     itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          movies!.results[index].backdropPath != null
-                              ? CachedNetworkImage(
-                                imageUrl:
-                                    "$imgpath${movies!.results[index].backdropPath}",
-                                height: 170,
-                              )
-                              : Image.asset("assets/netflix.png", height: 170,),
-                          SizedBox(
-                            width: 100,
-                            child: Text(
-                              movies!.results[index].title,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: Colors.white70, fontSize: 14),
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,MaterialPageRoute(builder:(context) =>MovieInfo(id: movies!.results[index].id),),);
+                        },
+                        child: Column(
+                          children: [
+                            movies!.results[index].backdropPath != null
+                                ? CachedNetworkImage(
+                                  imageUrl:
+                                      "$imgpath${movies!.results[index].backdropPath}",
+                                  height: 170,
+                                )
+                                : Image.asset("assets/netflix.png", height: 170,),
+                            SizedBox(
+                              width: 100,
+                              child: Text(
+                                movies!.results[index].title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(color: Colors.white70, fontSize: 14),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       );
                     },
                   ),

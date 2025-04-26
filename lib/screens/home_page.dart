@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:netflix/helper/custom_CarouselSlider.dart';
 import 'package:netflix/helper/movie_card.dart';
