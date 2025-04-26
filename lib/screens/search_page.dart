@@ -16,9 +16,9 @@ class _SearchPageState extends State<SearchPage> {
   SerachMovieModel? movies;
   TextEditingController _movie = TextEditingController();
   final ApiServices _apiServices = ApiServices();
-  void _search(String movie){
+  void _search(String movie) {
     // print(movie);
-    _apiServices.searchMovie(movie).then((data){
+    _apiServices.searchMovie(movie).then((data) {
       print("dajdk");
       movies = data;
       print(data.totalPages);
@@ -34,44 +34,54 @@ class _SearchPageState extends State<SearchPage> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 25),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 25,
+                ),
                 child: CupertinoSearchTextField(
                   padding: EdgeInsets.all(10),
                   controller: _movie,
-                  onSubmitted: (value){
-                     _search(_movie.text.toString());
+                  onSubmitted: (value) {
+                    _search(_movie.text.toString());
                   },
-                  style: TextStyle(color : Colors.white,),
-                  prefixIcon: Icon(Icons.search, color : Colors.grey,),
-                  suffixIcon: Icon(Icons.cancel, color : Colors.grey,),
+                  style: TextStyle(color: Colors.white),
+                  prefixIcon: Icon(Icons.search, color: Colors.grey),
+                  suffixIcon: Icon(Icons.cancel, color: Colors.grey),
                   backgroundColor: Colors.grey[800],
-                  ),
+                ),
               ),
-            
-              if(movies == null)...[
-                SizedBox.shrink()
-              ]
-              else ...[
+
+              if (movies == null) ...[
+                SizedBox.shrink(),
+              ] else ...[
                 GridView.builder(
                   shrinkWrap: true,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
-                    mainAxisSpacing: 15, 
+                    mainAxisSpacing: 15,
                     crossAxisSpacing: 10,
-                    childAspectRatio: 1.2 / 2
-                    ), 
+                    childAspectRatio: 1.2 / 2,
+                  ),
                   itemCount: movies!.results.length,
-                  itemBuilder: 
-                  (context, index){
-                     return Column(
+                  itemBuilder: (context, index) {
+                    return Column(
                       children: [
-                        CachedNetworkImage(imageUrl: "$imgpath${movies!.results[index].backdropPath}" ,height: 200,),
-                        Text(movies!.results[index].title, style: TextStyle(color : Colors.white70,fontSize: 8),),
+                        movies!.results[index].backdropPath != null
+                            ? CachedNetworkImage(
+                              imageUrl:
+                                  "$imgpath${movies!.results[index].backdropPath}",
+                              height: 200,
+                            )
+                            : SizedBox(height: 200,),
+                        Text(
+                          movies!.results[index].title,
+                          style: TextStyle(color: Colors.white70, fontSize: 8),
+                        ),
                       ],
                     );
-                  }
-                )
-              ]
+                  },
+                ),
+              ],
             ],
           ),
         ),
