@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix/helper/utils.dart';
 import 'package:netflix/models/serach_movie_model.dart';
+import 'package:netflix/models/top_searches_model.dart';
 import 'package:netflix/services/api_services.dart';
 
 class SearchPage extends StatefulWidget {
@@ -14,16 +15,21 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   SerachMovieModel? movies;
+  late Future<PopularMoviesModel> popularMovies;
   TextEditingController _movie = TextEditingController();
   final ApiServices _apiServices = ApiServices();
   void _search(String movie) {
     // print(movie);
     _apiServices.searchMovie(movie).then((data) {
-      print("dajdk");
       movies = data;
-      print(data.totalPages);
       setState(() {});
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    popularMovies = _apiServices.getPopularMovies();
   }
 
   @override
@@ -31,58 +37,111 @@ class _SearchPageState extends State<SearchPage> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 25,
-                ),
-                child: CupertinoSearchTextField(
-                  padding: EdgeInsets.all(10),
-                  controller: _movie,
-                  onSubmitted: (value) {
-                    _search(_movie.text.toString());
-                  },
-                  style: TextStyle(color: Colors.white),
-                  prefixIcon: Icon(Icons.search, color: Colors.grey),
-                  suffixIcon: Icon(Icons.cancel, color: Colors.grey),
-                  backgroundColor: Colors.grey[800],
-                ),
-              ),
-
-              if (movies == null) ...[
-                SizedBox.shrink(),
-              ] else ...[
-                GridView.builder(
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 15,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 1.2 / 2,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    // horizontal: 12.0,
+                    vertical: 25,
                   ),
-                  itemCount: movies!.results.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        movies!.results[index].backdropPath != null
-                            ? CachedNetworkImage(
-                              imageUrl:
-                                  "$imgpath${movies!.results[index].backdropPath}",
-                              height: 200,
-                            )
-                            : SizedBox(height: 200,),
-                        Text(
-                          movies!.results[index].title,
-                          style: TextStyle(color: Colors.white70, fontSize: 8),
-                        ),
-                      ],
-                    );
-                  },
+                  child: CupertinoSearchTextField(
+                    padding: EdgeInsets.all(10),
+                    controller: _movie,
+                    onSubmitted: (value) {
+                      if(value!='')
+                        _search(_movie.text.toString());
+                    },
+                    style: TextStyle(color: Colors.white),
+                    prefixIcon: Icon(Icons.search, color: Colors.grey),
+                    suffixIcon: Icon(Icons.cancel, color: Colors.grey),
+                    backgroundColor: Colors.grey[800],
+                  ),
                 ),
+            
+                if (_movie.text.isEmpty) ...[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Top Searches",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      FutureBuilder(future: popularMovies, builder: (context, snapshot){
+                        if(snapshot.hasData){
+                          var popMovie = snapshot.data!.results;
+                          return ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: popMovie!.length ,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index){
+                                return Container(
+                                  padding: EdgeInsets.all(5),
+                                  height: 150,
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                                  child: Row(
+                                    children: [
+                                      CachedNetworkImage(
+                                        imageUrl: "$imgpath${popMovie[index].posterPath}",
+                                      ),
+                                      SizedBox(width: 25),
+                                      SizedBox(
+                                        width: 260,
+                                        child: Text("${popMovie[index].title}", maxLines: 2, overflow: TextOverflow.ellipsis,),
+                                      ),
+                                    ]
+                                  ),
+                                );
+                          });
+                        }
+                        else{
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      }),
+                    ],
+                  )
+                ] else ...[
+                  GridView.builder(
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 15,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 1.2 / 2,
+                    ),
+                    itemCount: movies!.results.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          movies!.results[index].backdropPath != null
+                              ? CachedNetworkImage(
+                                imageUrl:
+                                    "$imgpath${movies!.results[index].backdropPath}",
+                                height: 170,
+                              )
+                              : Image.asset("assets/netflix.png", height: 170,),
+                          SizedBox(
+                            width: 100,
+                            child: Text(
+                              movies!.results[index].title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: Colors.white70, fontSize: 14),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

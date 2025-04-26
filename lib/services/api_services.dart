@@ -5,6 +5,7 @@ import 'package:netflix/helper/utils.dart';
 import 'package:netflix/models/now_playing_model.dart';
 import "package:http/http.dart" as http;
 import 'package:netflix/models/serach_movie_model.dart';
+import 'package:netflix/models/top_searches_model.dart';
 import 'package:netflix/models/tv_series_model.dart';
 
 const baseUrl = "https://api.themoviedb.org/3/";
@@ -23,6 +24,19 @@ class ApiServices {
     }
     print(response.statusCode);
     throw Exception("Can't load Upcoming Movies!!");
+
+  }
+  Future<PopularMoviesModel> getPopularMovies() async{
+    endpoint = "movie/popular";
+    final url = "$baseUrl$endpoint$api";
+    final response = await http.get(Uri.parse(url));
+    
+    if(response.statusCode == 200){
+      print("Popular Movies Success!!");
+      return PopularMoviesModel.fromJson(jsonDecode(response.body));
+    }
+    print(response.statusCode);
+    throw Exception("Can't load Popular Movies!!");
 
   }
   
@@ -67,4 +81,5 @@ class ApiServices {
     print(response.statusCode);
     throw Exception("Can't Search Movies!!");
   }
+
 }
