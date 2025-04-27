@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:netflix/helper/utils.dart';
 import 'package:netflix/models/now_playing_model.dart';
+import 'package:netflix/screens/movie_info.dart';
 
 class MovieCard extends StatelessWidget {
   final Future<MovieModel> movies;
@@ -39,13 +40,25 @@ class MovieCard extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: data.length,
                     itemBuilder: (context, index) {
-                      return Container(
-                        margin: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Image.network(
-                          "${imgpath}${data[index].posterPath}",
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      MovieInfo(id: data[index].id),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Image.network(
+                            "${imgpath}${data[index].posterPath}",
+                          ),
                         ),
                       );
                     },
