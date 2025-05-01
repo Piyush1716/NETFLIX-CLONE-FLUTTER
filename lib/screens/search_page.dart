@@ -87,9 +87,9 @@ class _SearchPageState extends State<SearchPage> {
                                   height: 150,
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
                                   child: GestureDetector(
-                                    // onTap: (){
-                                    //   Navigator.push(context, MaterialPageRoute(builder: (context) => MovieInfo(id: popMovie[index].id)));
-                                    // },
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => MovieInfo(id: popMovie[index].id)));
+                                    },
                                     child: Row(
                                       children: [
                                         CachedNetworkImage(

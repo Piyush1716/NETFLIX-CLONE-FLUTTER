@@ -4,6 +4,7 @@ import 'package:netflix/helper/utils.dart';
 import 'package:netflix/models/movie_info_model.dart';
 import 'package:netflix/models/now_playing_model.dart';
 import "package:http/http.dart" as http;
+import 'package:netflix/models/rec_movie_model.dart';
 import 'package:netflix/models/serach_movie_model.dart';
 import 'package:netflix/models/top_searches_model.dart';
 import 'package:netflix/models/tv_series_model.dart';
@@ -37,7 +38,19 @@ class ApiServices {
     }
     print(response.statusCode);
     throw Exception("Can't load Popular Movies!!");
-
+  }
+  Future<RecMovieModel> getRecommendations(int id) async{
+    // https: //api.themoviedb.org/3/movie/668489/recommendations
+    endpoint = "movie/$id/recommendations";
+    final url = "$baseUrl$endpoint$api";
+    final response = await http.get(Uri.parse(url));
+    
+    if(response.statusCode == 200){
+      print("Recommended Movies Success!!");
+      return RecMovieModel.fromJson(jsonDecode(response.body));
+    }
+    print(response.statusCode);
+    throw Exception("Can't load Recommendation Movies!!");
   }
   
   Future<MovieModel> getNowPlaying() async{

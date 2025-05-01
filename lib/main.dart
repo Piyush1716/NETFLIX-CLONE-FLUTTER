@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:netflix/screens/movie_info.dart';
 import 'package:netflix/screens/spalshscreen.dart';
 
 void main() {
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black).copyWith(surface: Colors.black),
         fontFamily: GoogleFonts.ptSans().fontFamily,
       ),
-      home: Spalshscreen(),
+      // home: Spalshscreen(),
+      home: MovieInfo(id: 668489),
     );
   }
 }
