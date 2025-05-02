@@ -25,8 +25,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black).copyWith(surface: Colors.black),
         fontFamily: GoogleFonts.ptSans().fontFamily,
       ),
-      // home: Spalshscreen(),
-      home: MovieInfo(id: 668489),
+      home: Spalshscreen(),
     );
   }
 }

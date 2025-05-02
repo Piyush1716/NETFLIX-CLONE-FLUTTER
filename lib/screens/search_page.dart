@@ -86,7 +86,7 @@ class _SearchPageState extends State<SearchPage> {
                                   padding: EdgeInsets.all(5),
                                   height: 150,
                                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
-                                  child: GestureDetector(
+                                  child: InkWell(
                                     onTap: (){
                                       Navigator.push(context, MaterialPageRoute(builder: (context) => MovieInfo(id: popMovie[index].id)));
                                     },
@@ -123,7 +123,7 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                     itemCount: movies!.results.length,
                     itemBuilder: (context, index) {
-                      return GestureDetector(
+                      return InkWell(
                         onTap: () {
                           Navigator.push(context,MaterialPageRoute(builder:(context) =>MovieInfo(id: movies!.results[index].id),),);
                         },

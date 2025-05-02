@@ -3,6 +3,7 @@ import 'package:netflix/helper/custom_CarouselSlider.dart';
 import 'package:netflix/helper/movie_card.dart';
 import 'package:netflix/models/now_playing_model.dart';
 import 'package:netflix/models/tv_series_model.dart';
+import 'package:netflix/screens/search_page.dart';
 import 'package:netflix/services/api_services.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,7 +35,9 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.black,
         title: Image.asset("assets/logo.png", height: 50, width: 120),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.search, color: Colors.white,)),
+          IconButton(onPressed: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+          }, icon: Icon(Icons.search, color: Colors.white,)),
           Padding(
             padding: const EdgeInsets.only(right: 20.0, left: 25),
             child: Container(height: 25, width: 25, decoration: BoxDecoration(

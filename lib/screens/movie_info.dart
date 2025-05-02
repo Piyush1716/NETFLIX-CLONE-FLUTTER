@@ -45,7 +45,7 @@ class _MovieInfoState extends State<MovieInfo> {
                 child: Column(
                   children: [
                     CachedNetworkImage(
-                      imageUrl: "$imgpath${movie!.posterPath}",
+                      imageUrl: "$imgpath${movie!.backdropPath}",
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height * 0.4,
                       fit: BoxFit.fitWidth,
@@ -69,7 +69,7 @@ class _MovieInfoState extends State<MovieInfo> {
                             Text(
                               movie.releaseDate.year.toString(),
                               style: TextStyle(
-                                color: Colors.white24,
+                                color: Colors.white54,
                                 fontSize: 20,
                               ),
                             ),
@@ -84,7 +84,7 @@ class _MovieInfoState extends State<MovieInfo> {
                                           child: Text(
                                             gener.name,
                                             style: TextStyle(
-                                              color: Colors.white24,
+                                              color: Colors.white54,
                                               fontSize: 20,
                                             ),
                                           ),
@@ -99,50 +99,81 @@ class _MovieInfoState extends State<MovieInfo> {
                           movie.overview,
                           maxLines: 6,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: Colors.white60, fontSize: 20),
+                          style: TextStyle(color: Colors.white70, fontSize: 20),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 15),
                       ],
                     ),
-                    Text(
-                      "More like this",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                    SizedBox(height: 10),
-
                     FutureBuilder(
                       future: recommendations,
                       builder: (context, snap) {
                         if (snap.hasData) {
                           var movies = snap.data;
-                          return GridView.builder(
-                            itemCount: movies!.results.length,
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                ),
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: (){
-                                  Navigator.push(context,MaterialPageRoute(builder:(context) =>MovieInfo(id: movies.results[index].id),),);
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        "$imgpath${movies.results[index].posterPath}",
-                                    height:
-                                        MediaQuery.of(context).size.height * 0.4,
+                          if(movies!.results.length>0){
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "More like this",
+                                  style: TextStyle(
+                                    color: Colors.white24,
+                                    fontSize: 20,
                                   ),
                                 ),
-                              );
-                            },
-                          );
+                                SizedBox(height: 10),
+                                GridView.builder(
+                                  itemCount: movies!.results.length,
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                      ),
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      margin: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                          15,
+                                        ),
+                                      ),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (context) => MovieInfo(
+                                                    id: movies.results[index].id,
+                                                  ),
+                                            ),
+                                          );
+                                        },
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "$imgpath${movies.results[index].posterPath}",
+                                          height:
+                                              MediaQuery.of(
+                                                context,
+                                              ).size.height *
+                                              0.4,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                          }
+                          else{
+                            
+                            return Text("No Movies to Recommend.",
+                              style: TextStyle(
+                                color: Colors.white30,
+                                fontSize: 15,
+                              ),
+                            );
+                          }
                         } else {
                           return Text("Error occured while loading!!");
                         }

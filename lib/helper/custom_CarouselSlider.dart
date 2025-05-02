@@ -17,7 +17,7 @@ class CustomCarouselslider extends StatelessWidget {
         itemCount: tvs.results.length, 
         itemBuilder: (context, index, realidx){
           var url = tvs.results[index].backdropPath;
-            return GestureDetector(child: Column(
+            return InkWell(child: Column(
               children: [
                 Expanded(child: CachedNetworkImage(imageUrl: "$imgpath$url")),
                 // SizedBox(height: 5),
