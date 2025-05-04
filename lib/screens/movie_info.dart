@@ -31,6 +31,12 @@ class _MovieInfoState extends State<MovieInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(onPressed: (){
+          Navigator.pop(context);
+        }, icon: Icon(Icons.arrow_back_ios, color : Colors.white,)),
+      ),
       body: FutureBuilder(
         future: movieInfo,
         builder: (context, snap) {
@@ -38,25 +44,24 @@ class _MovieInfoState extends State<MovieInfo> {
             var movie = snap.data;
             return Padding(
               padding: const EdgeInsets.symmetric(
-                vertical: 10.0,
+                vertical: 0,
                 horizontal: 15,
               ),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     CachedNetworkImage(
-                      imageUrl: "$imgpath${movie!.backdropPath}",
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      fit: BoxFit.fitWidth,
-                    ),
+                        imageUrl: "$imgpath${movie!.backdropPath}",
+                        width: MediaQuery.of(context).size.width,
+                        // height: MediaQuery.of(context).size.height * 0.4,
+                      ),
                     SizedBox(height: 20),
 
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          movie.title,
+                          movie!.title,
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -64,35 +69,38 @@ class _MovieInfoState extends State<MovieInfo> {
                         ),
                         SizedBox(height: 15),
 
-                        Row(
-                          children: [
-                            Text(
-                              movie.releaseDate.year.toString(),
-                              style: TextStyle(
-                                color: Colors.white54,
-                                fontSize: 20,
+                        SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              Text(
+                                movie.releaseDate.year.toString(),
+                                style: TextStyle(
+                                  color: Colors.white54,
+                                  fontSize: 20,
+                                ),
                               ),
-                            ),
-                            Row(
-                              children:
-                                  movie.genres
-                                      .map(
-                                        (gener) => Padding(
-                                          padding: const EdgeInsets.only(
-                                            left: 8.0,
-                                          ),
-                                          child: Text(
-                                            gener.name,
-                                            style: TextStyle(
-                                              color: Colors.white54,
-                                              fontSize: 20,
+                              Row(
+                                children:
+                                    movie.genres
+                                        .map(
+                                          (gener) => Padding(
+                                            padding: const EdgeInsets.only(
+                                              left: 8.0,
+                                            ),
+                                            child: Text(
+                                              gener.name,
+                                              style: TextStyle(
+                                                color: Colors.white54,
+                                                fontSize: 20,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      )
-                                      .toList(),
-                            ),
-                          ],
+                                        )
+                                        .toList(),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(height: 10),
                         Text(
@@ -109,7 +117,7 @@ class _MovieInfoState extends State<MovieInfo> {
                       builder: (context, snap) {
                         if (snap.hasData) {
                           var movies = snap.data;
-                          if(movies!.results.length>0){
+                          if(movies!.results.isNotEmpty){
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -122,7 +130,7 @@ class _MovieInfoState extends State<MovieInfo> {
                                 ),
                                 SizedBox(height: 10),
                                 GridView.builder(
-                                  itemCount: movies!.results.length,
+                                  itemCount: movies.results.length,
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
                                   gridDelegate:
@@ -166,7 +174,6 @@ class _MovieInfoState extends State<MovieInfo> {
                             );
                           }
                           else{
-                            
                             return Text("No Movies to Recommend.",
                               style: TextStyle(
                                 color: Colors.white30,
