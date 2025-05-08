@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:netflix/helper/utils.dart';
+import 'package:netflix/models/search_tv_model.dart';
 import 'package:netflix/models/movie_info_model.dart';
 import 'package:netflix/models/now_playing_model.dart';
 import "package:http/http.dart" as http;
@@ -14,6 +15,9 @@ const api = "?api_key=$apikey";
 late String endpoint;
 
 class ApiServices {
+
+  // --------- Movie Endpoints ------------------
+
   Future<MovieModel> getUpcommingMovies() async{
     endpoint = "movie/upcoming";
     final url = "$baseUrl$endpoint$api";
@@ -78,21 +82,8 @@ class ApiServices {
     throw Exception("Can't fetch Movie info!!");
   }
 
-  Future<TvSeriesModel> getTopRatedTvSeries() async{
-    endpoint = "tv/top_rated";
-    final url = "$baseUrl$endpoint$api";
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      print("Top rated Tvs Success!!");
-      return TvSeriesModel.fromJson(jsonDecode(response.body));
-    }
-    print(response.statusCode);
-    throw Exception("Can't fetch Top rated tvs!!");
-  }
-
   Future<SerachMovieModel> searchMovie(String movie) async{
-    //  url is liek https://api.themoviedb.org/3/search/movie?query=xx&api_key=111
+    //  url is like https://api.themoviedb.org/3/search/movie?query=xx&api_key=111
     endpoint = "search/movie?query=$movie";
     final url = "$baseUrl$endpoint&api_key=$apikey";
     final response = await http.get(Uri.parse(url));
@@ -106,5 +97,36 @@ class ApiServices {
     print(response.statusCode);
     throw Exception("Can't Search Movies!!");
   }
+  Future<(SearchTvModel, SerachMovieModel)> searchTvMovie(String movie) async{
+    String movieApi = "search/movie?query=$movie";
+    String tvApi = "search/tv?query=$movie";
+    final urlMovie = "$baseUrl$movieApi&api_key=$apikey";
+    final urlTv = "$baseUrl$tvApi&api_key=$apikey";
+    final responseMovie = await http.get(Uri.parse(urlMovie));
+    final responseTv = await http.get(Uri.parse(urlTv));
 
+    if(responseTv.statusCode == 200 && responseMovie.statusCode == 200){
+      SerachMovieModel movies = SerachMovieModel.fromJson(jsonDecode(responseMovie.body));
+      SearchTvModel tvs = SearchTvModel.fromJson(jsonDecode(responseTv.body));
+
+      return (tvs, movies);
+    }
+    print("Error");
+    throw Exception("Can't Search Movies!!");
+  }
+
+  // --------- TV Endpoints ------------------
+  
+   Future<TvSeriesModel> getTopRatedTvSeries() async {
+    endpoint = "tv/top_rated";
+    final url = "$baseUrl$endpoint$api";
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      print("Top rated Tvs Success!!");
+      return TvSeriesModel.fromJson(jsonDecode(response.body));
+    }
+    print(response.statusCode);
+    throw Exception("Can't fetch Top rated tvs!!");
+  }
 }

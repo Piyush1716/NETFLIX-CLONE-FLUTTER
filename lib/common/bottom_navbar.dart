@@ -10,7 +10,7 @@ class BottomNavbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      initialIndex: 2,
+      initialIndex: 1,
       child: Scaffold(
         body: TabBarView(children: [
           HomePage(),

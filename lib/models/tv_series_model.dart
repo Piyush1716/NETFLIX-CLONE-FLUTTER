@@ -50,8 +50,8 @@ class Result {
     String backdropPath;
     List<int> genreIds;
     int id;
-    List<OriginCountry> originCountry;
-    OriginalLanguage originalLanguage;
+    List<String> originCountry;
+    String originalLanguage;
     String originalName;
     String overview;
     double popularity;
@@ -83,8 +83,8 @@ class Result {
         String? backdropPath,
         List<int>? genreIds,
         int? id,
-        List<OriginCountry>? originCountry,
-        OriginalLanguage? originalLanguage,
+        List<String>? originCountry,
+        String? originalLanguage,
         String? originalName,
         String? overview,
         double? popularity,
@@ -120,8 +120,8 @@ class Result {
         backdropPath: json["backdrop_path"],
         genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
         id: json["id"],
-        originCountry: List<OriginCountry>.from(json["origin_country"].map((x) => originCountryValues.map[x]!)),
-        originalLanguage: originalLanguageValues.map[json["original_language"]]!,
+        originCountry: json["origin_country"],
+        originalLanguage: json["original_language"],
         originalName: json["original_name"],
         overview: json["overview"],
         popularity: json["popularity"]?.toDouble(),
@@ -137,8 +137,8 @@ class Result {
         "backdrop_path": backdropPath,
         "genre_ids": List<dynamic>.from(genreIds.map((x) => x)),
         "id": id,
-        "origin_country": List<dynamic>.from(originCountry.map((x) => originCountryValues.reverse[x])),
-        "original_language": originalLanguageValues.reverse[originalLanguage],
+        "origin_country": originCountry,
+        "original_language": originalLanguage,
         "original_name": originalName,
         "overview": overview,
         "popularity": popularity,
@@ -149,32 +149,6 @@ class Result {
         "vote_count": voteCount,
     };
 }
-
-enum OriginCountry {
-    CA,
-    JP,
-    KR,
-    US
-}
-
-final originCountryValues = EnumValues({
-    "CA": OriginCountry.CA,
-    "JP": OriginCountry.JP,
-    "KR": OriginCountry.KR,
-    "US": OriginCountry.US
-});
-
-enum OriginalLanguage {
-    EN,
-    JA,
-    KO
-}
-
-final originalLanguageValues = EnumValues({
-    "en": OriginalLanguage.EN,
-    "ja": OriginalLanguage.JA,
-    "ko": OriginalLanguage.KO
-});
 
 class EnumValues<T> {
     Map<String, T> map;
