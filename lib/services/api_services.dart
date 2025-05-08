@@ -90,29 +90,24 @@ class ApiServices {
 
     if (response.statusCode == 200) {
       print("Search Movies Success!!");
-      try{return SerachMovieModel.fromJson(jsonDecode(response.body));}
-      catch(e){print("json error");}
+      return SerachMovieModel.fromJson(jsonDecode(response.body));
     }
     print("Error");
     print(response.statusCode);
     throw Exception("Can't Search Movies!!");
   }
-  Future<(SearchTvModel, SerachMovieModel)> searchTvMovie(String movie) async{
-    String movieApi = "search/movie?query=$movie";
-    String tvApi = "search/tv?query=$movie";
-    final urlMovie = "$baseUrl$movieApi&api_key=$apikey";
-    final urlTv = "$baseUrl$tvApi&api_key=$apikey";
-    final responseMovie = await http.get(Uri.parse(urlMovie));
-    final responseTv = await http.get(Uri.parse(urlTv));
+  Future<SearchTvModel> searchTv(String tv) async{
+    endpoint = "search/tv?query=$tv";
+    final url = "$baseUrl$endpoint&api_key=$apikey";
+    final response = await http.get(Uri.parse(url));
 
-    if(responseTv.statusCode == 200 && responseMovie.statusCode == 200){
-      SerachMovieModel movies = SerachMovieModel.fromJson(jsonDecode(responseMovie.body));
-      SearchTvModel tvs = SearchTvModel.fromJson(jsonDecode(responseTv.body));
-
-      return (tvs, movies);
+    if (response.statusCode == 200) {
+      print("Search TVs Success!!");
+      return SearchTvModel.fromJson(jsonDecode(response.body));
     }
     print("Error");
-    throw Exception("Can't Search Movies!!");
+    print(response.statusCode);
+    throw Exception("Can't Search Tvs!!");
   }
 
   // --------- TV Endpoints ------------------

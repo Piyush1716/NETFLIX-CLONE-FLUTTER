@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix/helper/utils.dart';
-import 'package:netflix/models/search_tv_model.dart';
 import 'package:netflix/models/serach_movie_model.dart';
 import 'package:netflix/models/top_searches_model.dart';
 import 'package:netflix/screens/movie_info.dart';
@@ -18,19 +17,12 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   SerachMovieModel? movies;
   late Future<PopularMoviesModel> popularMovies;
-  (SearchTvModel, SerachMovieModel)? tvMovie ;
   TextEditingController _movie = TextEditingController();
   final ApiServices _apiServices = ApiServices();
   void _search(String movie) {
     // print(movie);
     _apiServices.searchMovie(movie).then((data) {
       movies = data;
-      setState(() {});
-    });
-    _apiServices.searchTvMovie(movie).then((data){
-      tvMovie = data;
-      print(tvMovie!.$1.results.length);
-      print(tvMovie!.$2.results.length);
       setState(() {});
     });
   }
@@ -121,66 +113,43 @@ class _SearchPageState extends State<SearchPage> {
                     ],
                   )
                 ] else ...[
-                  if(tvMovie != null)...[
-                    if(tvMovie!.$2.results.isEmpty)...[
-                      GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          mainAxisSpacing: 15,
-                          crossAxisSpacing: 10,
-                          childAspectRatio: 1.2 / 2,
-                        ),
-                        itemCount: tvMovie!.$2.results.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => MovieInfo(
-                                        id: movies!.results[index].id,
-                                      ),
-                                ),
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                movies!.results[index].backdropPath != null
-                                    ? CachedNetworkImage(
-                                      imageUrl:
-                                          "$imgpath${movies!.results[index].backdropPath}",
-                                      height: 170,
-                                    )
-                                    : Image.asset(
-                                      "assets/netflix.png",
-                                      height: 170,
-                                    ),
-                                SizedBox(
-                                  width: 100,
-                                  child: Text(
-                                    movies!.results[index].title,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
+                  GridView.builder(
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 15,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 1.2 / 2,
+                    ),
+                    itemCount: movies!.results.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(context,MaterialPageRoute(builder:(context) =>MovieInfo(id: movies!.results[index].id),),);
                         },
-                      )
-                    ]else...[
-                      Center(child: Text("No Movie Available!!", style: TextStyle(color : Colors.white,fontSize: 30),))
-                    ]
-                    
-                  ]else...[
-                    Center(child: CircularProgressIndicator())
-                  ]
+                        child: Column(
+                          children: [
+                            movies!.results[index].backdropPath != null
+                                ? CachedNetworkImage(
+                                  imageUrl:
+                                      "$imgpath${movies!.results[index].backdropPath}",
+                                  height: 170,
+                                )
+                                : Image.asset("assets/netflix.png", height: 170,),
+                            SizedBox(
+                              width: 100,
+                              child: Text(
+                                movies!.results[index].title,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(color: Colors.white70, fontSize: 14),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ],
             ),
