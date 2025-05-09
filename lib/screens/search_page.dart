@@ -5,6 +5,7 @@ import 'package:netflix/helper/utils.dart';
 import 'package:netflix/models/search_model.dart';
 import 'package:netflix/models/top_searches_model.dart';
 import 'package:netflix/screens/movie_info.dart';
+import 'package:netflix/screens/tv_info.dart';
 import 'package:netflix/services/api_services.dart';
 
 class SearchPage extends StatefulWidget {
@@ -16,7 +17,6 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   SearchModel? movies;
-  // SearchTvModel? tvs;
   late Future<PopularMoviesModel> popularMovies;
   TextEditingController _movie = TextEditingController();
   final ApiServices _apiServices = ApiServices();
@@ -55,7 +55,6 @@ class _SearchPageState extends State<SearchPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    // horizontal: 12.0,
                     vertical: 25,
                   ),
                   child: Row(
@@ -90,7 +89,7 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ),
             
-                if (_movie.text.isEmpty) ...[
+                if (_movie.text.isEmpty || movies==null) ...[
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -109,7 +108,6 @@ class _SearchPageState extends State<SearchPage> {
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
                             itemCount: popMovie.length ,
-                            physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index){
                                 return Container(
                                   padding: EdgeInsets.all(5),
@@ -125,10 +123,7 @@ class _SearchPageState extends State<SearchPage> {
                                           imageUrl: "$imgpath${popMovie[index].posterPath}",
                                         ),
                                         SizedBox(width: 25),
-                                        SizedBox(
-                                          // width: 260,
-                                          child: Text("${popMovie[index].title}", maxLines: 2, overflow: TextOverflow.ellipsis,),
-                                        ),
+                                        Text("${popMovie[index].title}", maxLines: 2, overflow: TextOverflow.ellipsis,),
                                       ]
                                     ),
                                   ),
@@ -154,7 +149,11 @@ class _SearchPageState extends State<SearchPage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
+                          if(movies!.results[index].video!=null)
                           Navigator.push(context,MaterialPageRoute(builder:(context) =>MovieInfo(id: movies!.results[index].id),),);
+                          else
+                          Navigator.push(context,MaterialPageRoute(builder:(context) =>TvInfo(id: movies!.results[index].id),),);
+                          
                         },
                         child: Column(
                           children: [
@@ -165,14 +164,11 @@ class _SearchPageState extends State<SearchPage> {
                                   height: 170,
                                 )
                                 : Image.asset("assets/netflix.png", height: 170,),
-                            SizedBox(
-                              width: 100,
-                              child: Text(
-                                movies!.results[index].title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(color: Colors.white70, fontSize: 14),
-                              ),
+                            Text(
+                              movies!.results[index].title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: Colors.white70, fontSize: 14),
                             ),
                           ],
                         ),

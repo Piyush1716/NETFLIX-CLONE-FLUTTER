@@ -110,7 +110,14 @@ class ApiServices {
 
     if (response.statusCode == 200) {
       print("Top rated Tvs Success!!");
-      return TvSeriesModel.fromJson(jsonDecode(response.body));
+      try{
+        var x = TvSeriesModel.fromJson(jsonDecode(response.body));
+        return x;
+      }
+      catch(e){
+        print(e);
+      }
+      print("kjdha");
     }
     print(response.statusCode);
     throw Exception("Can't fetch Top rated tvs!!");
@@ -155,7 +162,7 @@ class ApiServices {
     throw Exception("Can't load Recommendation TV!!");
   }
   Future<TvSeasonModel> getSeasonInfo(int id,int season) async {
-    endpoint = "tv/$id/season/1";
+    endpoint = "tv/$id/season/$season";
     final url = "$baseUrl$endpoint$api";
     print(url);
     final response = await http.get(Uri.parse(url));
