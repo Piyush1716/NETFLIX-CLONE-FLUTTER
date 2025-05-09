@@ -52,6 +52,7 @@ class _NewAndHotState extends State<NewAndHot> {
             ),
           ],
           bottom: TabBar(
+            padding: EdgeInsets.only(bottom: 12),
             labelStyle: TextStyle(fontSize: 15, color : Colors.black, fontWeight: FontWeight.bold),
             indicatorAnimation: TabIndicatorAnimation.linear,
             indicator: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
@@ -59,10 +60,10 @@ class _NewAndHotState extends State<NewAndHot> {
             dividerColor: Colors.black,
             tabs: [
               Tab(
-                child: Text("   🍿 Comming Soon   "),
+                child: Text(" 🍿 Comming Soon "),
               ),
               Tab(
-                child: Text("   🔥 Top Series   "),
+                child: Text(" 🔥 Top Series "),
               ),
           ]),
         ),

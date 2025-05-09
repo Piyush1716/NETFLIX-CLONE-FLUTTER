@@ -15,7 +15,7 @@ class _SpalshscreenState extends State<Spalshscreen> {
   @override
   void initState(){
     super.initState();
-    Timer(Duration(seconds: 0), (){
+    Timer(Duration(seconds: 4), (){
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (conext) => BottomNavbar()));
     });
   }
