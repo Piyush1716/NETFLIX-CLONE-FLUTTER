@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:netflix/helper/custom_CarouselSlider.dart';
 import 'package:netflix/helper/movie_card.dart';
 import 'package:netflix/models/now_playing_model.dart';
+import 'package:netflix/models/today_trending_tv_model.dart';
 import 'package:netflix/models/tv_series_model.dart';
 import 'package:netflix/screens/search_page.dart';
 import 'package:netflix/services/api_services.dart';
@@ -16,7 +17,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Future<MovieModel> upcomings;
   late Future<MovieModel> nowPlaying;
-  late Future<TvSeriesModel> topTvs;
+  // late Future<TvSeriesModel> topTvs;
+  late Future<TodayTrendingTvModel> topTvs;
 
   final ApiServices _apiServices = ApiServices();
 
@@ -25,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     upcomings = _apiServices.getUpcommingMovies();
     nowPlaying = _apiServices.getNowPlaying();
-    topTvs = _apiServices.getTopRatedTvSeries();
+    topTvs = _apiServices.getTrendinTvToday();
   }
 
   @override

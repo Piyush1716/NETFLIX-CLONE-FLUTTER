@@ -10,6 +10,7 @@ import 'package:netflix/models/rec_movie_model.dart';
 import 'package:netflix/models/season_Info_model.dart';
 import 'package:netflix/models/serach_movie_model.dart';
 import 'package:netflix/models/similar_tv_model.dart';
+import 'package:netflix/models/today_trending_tv_model.dart';
 import 'package:netflix/models/top_searches_model.dart';
 import 'package:netflix/models/tv_info_model.dart';
 import 'package:netflix/models/tv_series_model.dart';
@@ -170,6 +171,19 @@ class ApiServices {
     if (response.statusCode == 200) {
       print("Season Info Success!!");
       return TvSeasonModel.fromJson(jsonDecode(response.body));
+    }
+    print(response.statusCode);
+    throw Exception("Can't load Season info!!");
+  }
+  Future<TodayTrendingTvModel> getTrendinTvToday() async {
+    endpoint = "trending/tv/day";
+    final url = "$baseUrl$endpoint$api";
+    print(url);
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      print("Season Info Success!!");
+      return TodayTrendingTvModel.fromJson(jsonDecode(response.body));
     }
     print(response.statusCode);
     throw Exception("Can't load Season info!!");

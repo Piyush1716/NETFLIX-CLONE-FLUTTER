@@ -2,10 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix/helper/utils.dart';
+import 'package:netflix/models/today_trending_tv_model.dart';
 import 'package:netflix/models/tv_series_model.dart';
+import 'package:netflix/screens/tv_info.dart';
 
 class CustomCarouselslider extends StatelessWidget {
-  final TvSeriesModel tvs;
+  final TodayTrendingTvModel tvs;
   const CustomCarouselslider({super.key, required this.tvs});
 
   @override
@@ -17,7 +19,11 @@ class CustomCarouselslider extends StatelessWidget {
         itemCount: tvs.results.length, 
         itemBuilder: (context, index, realidx){
           var url = tvs.results[index].backdropPath;
-            return InkWell(child: Column(
+            return InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TvInfo(id: tvs.results[index].id)));
+              },
+              child: Column(
               children: [
                 Expanded(child: CachedNetworkImage(imageUrl: "$imgpath$url")),
                 // SizedBox(height: 5),
