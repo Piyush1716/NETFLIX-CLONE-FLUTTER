@@ -3,8 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:netflix/helper/comming_soon_card.dart';
+import 'package:netflix/helper/top_reated_series_card.dart';
 import 'package:netflix/helper/utils.dart';
 import 'package:netflix/models/now_playing_model.dart';
+import 'package:netflix/models/tv_series_model.dart';
 import 'package:netflix/services/api_services.dart';
 
 class NewAndHot extends StatefulWidget {
@@ -16,12 +18,14 @@ class NewAndHot extends StatefulWidget {
 
 class _NewAndHotState extends State<NewAndHot> {
   late Future<MovieModel> _upComingMovies;
+  late Future<TvSeriesModel> _topRatedTvs;
 
   ApiServices _apiServices = ApiServices();
   @override
   void initState() {
     super.initState();
     _upComingMovies = _apiServices.getUpcommingMovies();
+    _topRatedTvs = _apiServices.getTopRatedTvSeries();
   }
   @override
   Widget build(BuildContext context) {
@@ -83,7 +87,22 @@ class _NewAndHotState extends State<NewAndHot> {
               }
             }
           ),
-          Center(child: Text("2"),),
+          FutureBuilder(
+            future: _topRatedTvs, 
+            builder: (context, snap){
+            if(snap.hasData){
+              print(snap.data!.totalPages);
+              var data = snap.data;
+              return ListView.builder(
+                itemCount: data!.results.length,
+                itemBuilder: (context,index){
+                  var tv = data.results[index];
+                  return TopRatedCard(id: tv.id, month: "Jun", day: "12", imgUrl: "$imgpath${tv.posterPath}", overview: tv.overview, posterUrl: "$imgpath${tv.backdropPath}");
+                });
+            } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+          })
         ]),
       ),
     );
