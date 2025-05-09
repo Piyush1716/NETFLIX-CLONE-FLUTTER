@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:netflix/screens/spalshscreen.dart';
+import 'package:netflix/screens/tv_info.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black).copyWith(surface: Colors.black),
         fontFamily: GoogleFonts.ptSans().fontFamily,
       ),
-      home: Spalshscreen(),
+      // home: Spalshscreen(),
+      home: TvInfo(id: 1396,),
     );
   }
 }

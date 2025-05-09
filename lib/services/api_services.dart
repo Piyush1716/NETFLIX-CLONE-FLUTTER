@@ -1,13 +1,17 @@
 import 'dart:convert';
 
 import 'package:netflix/helper/utils.dart';
+import 'package:netflix/models/search_model.dart';
 import 'package:netflix/models/search_tv_model.dart';
 import 'package:netflix/models/movie_info_model.dart';
 import 'package:netflix/models/now_playing_model.dart';
 import "package:http/http.dart" as http;
 import 'package:netflix/models/rec_movie_model.dart';
+import 'package:netflix/models/season_Info_model.dart';
 import 'package:netflix/models/serach_movie_model.dart';
+import 'package:netflix/models/similar_tv_model.dart';
 import 'package:netflix/models/top_searches_model.dart';
+import 'package:netflix/models/tv_info_model.dart';
 import 'package:netflix/models/tv_series_model.dart';
 
 const baseUrl = "https://api.themoviedb.org/3/";
@@ -96,19 +100,6 @@ class ApiServices {
     print(response.statusCode);
     throw Exception("Can't Search Movies!!");
   }
-  Future<SearchTvModel> searchTv(String tv) async{
-    endpoint = "search/tv?query=$tv";
-    final url = "$baseUrl$endpoint&api_key=$apikey";
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      print("Search TVs Success!!");
-      return SearchTvModel.fromJson(jsonDecode(response.body));
-    }
-    print("Error");
-    print(response.statusCode);
-    throw Exception("Can't Search Tvs!!");
-  }
 
   // --------- TV Endpoints ------------------
   
@@ -123,5 +114,57 @@ class ApiServices {
     }
     print(response.statusCode);
     throw Exception("Can't fetch Top rated tvs!!");
+  }
+  
+  Future<SearchModel> search(String search ,String tv) async{
+    endpoint = "search/$search?query=$tv";
+    final url = "$baseUrl$endpoint&api_key=$apikey";
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      print("Search TVs Success!!");
+      return SearchModel.fromJson(jsonDecode(response.body));
+    }
+    print("Error");
+    print(response.statusCode);
+    throw Exception("Can't Search Tvs!!");
+  }
+  Future<TvInfoModel> getTvInfo(int id) async {
+    endpoint = "tv/${id}";
+    final url = "$baseUrl$endpoint$api";
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      print("TV info Success!!");
+      return TvInfoModel.fromJson(jsonDecode(response.body));
+    }
+    print(response.statusCode);
+    throw Exception("Can't fetch TV info!!");
+  }
+  Future<SimilarTvModel> getSimilarTv(int id) async {
+    // https: //api.themoviedb.org/3/tv/1396/similar
+    endpoint = "tv/$id/recommendations";
+    final url = "$baseUrl$endpoint$api";
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      print("Recommended Tv Success!!");
+      return SimilarTvModel.fromJson(jsonDecode(response.body));
+    }
+    print(response.statusCode);
+    throw Exception("Can't load Recommendation TV!!");
+  }
+  Future<TvSeasonModel> getSeasonInfo(int id,int season) async {
+    endpoint = "tv/$id/season/1";
+    final url = "$baseUrl$endpoint$api";
+    print(url);
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      print("Season Info Success!!");
+      return TvSeasonModel.fromJson(jsonDecode(response.body));
+    }
+    print(response.statusCode);
+    throw Exception("Can't load Season info!!");
   }
 }

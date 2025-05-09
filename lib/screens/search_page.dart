@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix/helper/utils.dart';
-import 'package:netflix/models/serach_movie_model.dart';
+import 'package:netflix/models/search_model.dart';
 import 'package:netflix/models/top_searches_model.dart';
 import 'package:netflix/screens/movie_info.dart';
 import 'package:netflix/services/api_services.dart';
@@ -15,16 +15,24 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  SerachMovieModel? movies;
+  SearchModel? movies;
+  // SearchTvModel? tvs;
   late Future<PopularMoviesModel> popularMovies;
   TextEditingController _movie = TextEditingController();
   final ApiServices _apiServices = ApiServices();
   void _search(String movie) {
-    // print(movie);
-    _apiServices.searchMovie(movie).then((data) {
-      movies = data;
-      setState(() {});
-    });
+    if(selected == "Movie"){
+      _apiServices.search("movie",movie).then((data) {
+        movies = data;
+        setState(() {});
+      });
+    }
+    if(selected == "Tv"){
+      _apiServices.search("tv",movie).then((data) {
+        movies = data;
+        setState(() {});
+      });
+    }
   }
 
   @override
@@ -32,6 +40,9 @@ class _SearchPageState extends State<SearchPage> {
     super.initState();
     popularMovies = _apiServices.getPopularMovies();
   }
+
+  String selected = "Movie";
+  List<String> items = ["Tv", "Movie"];
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +58,35 @@ class _SearchPageState extends State<SearchPage> {
                     // horizontal: 12.0,
                     vertical: 25,
                   ),
-                  child: CupertinoSearchTextField(
-                    padding: EdgeInsets.all(10),
-                    controller: _movie,
-                    onSubmitted: (value) {
-                      if(value!='')
-                        _search(_movie.text.toString());
-                    },
-                    style: TextStyle(color: Colors.white),
-                    prefixIcon: Icon(Icons.search, color: Colors.grey),
-                    suffixIcon: Icon(Icons.cancel, color: Colors.grey),
-                    backgroundColor: Colors.grey[800],
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: CupertinoSearchTextField(
+                          padding: EdgeInsets.all(10),
+                          controller: _movie,
+                          onSubmitted: (value) {
+                            if(value!='')
+                              _search(_movie.text.toString());
+                          },
+                          style: TextStyle(color: Colors.white),
+                          prefixIcon: Icon(Icons.search, color: Colors.grey),
+                          suffixIcon: Icon(Icons.cancel, color: Colors.grey),
+                          backgroundColor: Colors.grey[800],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal:8.0),
+                        child: DropdownButton(
+                          value: selected,
+                          items: items.map((item) => DropdownMenuItem(value: item, child: Text(item, style: TextStyle(color : Colors.white,),))).toList(),
+                        onChanged: (String? value) {
+                          setState(() {
+                            selected = value!;
+                          });
+                        },
+                        ),
+                      )
+                    ],
                   ),
                 ),
             
@@ -97,7 +126,7 @@ class _SearchPageState extends State<SearchPage> {
                                         ),
                                         SizedBox(width: 25),
                                         SizedBox(
-                                          width: 260,
+                                          // width: 260,
                                           child: Text("${popMovie[index].title}", maxLines: 2, overflow: TextOverflow.ellipsis,),
                                         ),
                                       ]
